@@ -72,8 +72,6 @@ void addChild(Treenode *parent, Treenode *child)
         }
         sibling->sibling = child; // Add as the last sibling
     }
-    // Debug print
-    // printf("Added child: Type: %c, Val: %s, Parent Type: %c\n", child->type, child->val, parent->type);
 }
 // Function to free the entire tree
 void freeTree(Treenode *root)
@@ -178,9 +176,7 @@ void setatt(Treenode *node, Treenode *parent)
 {
     if (node == NULL)
         return;
-    //     if (node != NULL) {
-    //     printf("Node type: %c, Child: %p, Sibling: %p\n", node->type, (void*)node->child, (void*)node->sibling);
-    // }
+
 
     // First, set attributes for the current node based on its type and parent
     switch (node->type)
@@ -250,7 +246,8 @@ void setatt(Treenode *node, Treenode *parent)
         break;
     case 'M':
         if (node->child->sibling == NULL)
-        {//M->0|1|D
+        {
+            //M->0|1|D
             setatt(node->child, node);
             node->inh = concat(parent->inh, parent->child->val);
             node->val = concat(node->inh, node->child->val);
@@ -305,7 +302,6 @@ int extractPower(Treenode *node)
     if (node->child->sibling != NULL)
     {
         defaultValue = atoi(node->child->sibling->sibling->val);
-        // printf("X->x^%d\n",defaultValue);
     }
 
     return defaultValue;
@@ -319,7 +315,7 @@ void helperEvalPoly(Treenode *node, int n, int *sum)
     {
         if ((node->child->sibling == NULL) && (node->child->type != 'X'))
         {
-            // printf("T->1|N\n");
+            // T->1|N
             if (strcmp(node->inh, "-") == 0)
             {
                 *sum -= atoi(node->child->val);
@@ -331,7 +327,7 @@ void helperEvalPoly(Treenode *node, int n, int *sum)
         }
         else if (node->child->type == 'X')
         {
-            // printf("T->X\n");
+            // T->X
             if (strcmp(node->inh, "-") == 0)
             {
                 *sum -= binExp(n, extractPower(node->child));
@@ -343,7 +339,7 @@ void helperEvalPoly(Treenode *node, int n, int *sum)
         }
         else
         {
-            // printf("T->NX\n");
+            // T->NX
             int N = atoi(node->child->val);
             if (strcmp(node->inh, "-") == 0)
             {
